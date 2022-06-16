@@ -129,6 +129,12 @@ configuration options for TechDocs.</p>
 
     <span class="hljs-attr">type:</span> <span class="hljs-string">'local'</span>
 
+    <span class="hljs-comment"># Optional when techdocs.publisher.type is set to 'local'.</span>
+
+    <span class="hljs-attr">local:</span>
+      <span class="hljs-comment"># (Optional). Set this to specify where the generated documentation is stored.</span>
+      <span class="hljs-attr">publishDirectory:</span> <span class="hljs-string">'/path/to/local/directory'</span>
+
     <span class="hljs-comment"># Required when techdocs.publisher.type is set to 'googleGcs'. Skip otherwise.</span>
 
     <span class="hljs-attr">googleGcs:</span>
