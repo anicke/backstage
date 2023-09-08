@@ -1,0 +1,9 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: internal-plugin-jira-backend
+  title: '@internal/plugin-jira-backend'
+spec:
+  lifecycle: experimental
+  type: backstage-backend-plugin
+  owner: group:backstage

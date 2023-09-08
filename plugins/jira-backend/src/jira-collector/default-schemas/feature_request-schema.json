@@ -1,0 +1,36 @@
+{
+  "definitions": {
+    "IssueType": {
+      "title": "Issue Type",
+      "default": "Feature Request",
+      "type": "string",
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": ["Feature Request"],
+          "title": "Feature Request"
+        }
+      ]
+    }
+  },
+  "title": "Jira issue collector",
+  "description": "Create a Jira feature request.",
+  "type": "object",
+  "required": ["summary", "issueType", "description"],
+  "properties": {
+    "issueType": {
+      "$ref": "#/definitions/IssueType",
+      "title": "Issue Type"
+    },
+    "summary": {
+      "type": "string",
+      "default": "Feature request",
+      "title": "Summary"
+    },
+    "description": {
+      "type": "string",
+      "title": "Feature description",
+      "description": "Describe the missing feature."
+    }
+  }
+}

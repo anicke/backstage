@@ -1,0 +1,20 @@
+{
+  "whatDidYouDo": {
+    "ui:widget": "textarea",
+    "ui:options": {
+      "rows": 5
+    }
+  },
+  "whatDidYouExpectToHappen": {
+    "ui:widget": "textarea",
+    "ui:options": {
+      "rows": 3
+    }
+  },
+  "whatHappened": {
+    "ui:widget": "textarea",
+    "ui:options": {
+      "rows": 5
+    }
+  }
+}

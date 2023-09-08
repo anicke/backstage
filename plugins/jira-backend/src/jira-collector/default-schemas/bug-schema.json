@@ -1,0 +1,87 @@
+{
+  "definitions": {
+    "Priority": {
+      "title": "Priority",
+      "default": "Medium",
+      "description": "If you have an urgent problem that you expect to get immediate attention, set the priority to Highest. Tickets with lower priority levels will be addressed on (at least) a daily basis.",
+      "type": "string",
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": ["Lowest"],
+          "title": "Lowest"
+        },
+        {
+          "type": "string",
+          "enum": ["Low"],
+          "title": "Low"
+        },
+        {
+          "type": "string",
+          "enum": ["Medium"],
+          "title": "Medium"
+        },
+        {
+          "type": "string",
+          "enum": ["High"],
+          "title": "High"
+        },
+        {
+          "type": "string",
+          "enum": ["Highest"],
+          "title": "Highest"
+        }
+      ]
+    },
+    "IssueType": {
+      "title": "Issue Type",
+      "default": "Bug",
+      "type": "string",
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": ["Bug"],
+          "title": "Bug"
+        }
+      ]
+    }
+  },
+  "title": "Jira issue collector",
+  "description": "Create a Jira issue.",
+  "type": "object",
+  "required": [
+    "summary",
+    "issueType",
+    "whatDidYouDo",
+    "whatDidYouExpectToHappen",
+    "whatHappened"
+  ],
+  "properties": {
+    "priority": {
+      "$ref": "#/definitions/Priority",
+      "title": "Ticket Priority"
+    },
+    "issueType": {
+      "$ref": "#/definitions/IssueType",
+      "title": "Issue Type"
+    },
+    "summary": {
+      "type": "string",
+      "default": "Bug report",
+      "title": "Summary"
+    },
+    "whatDidYouDo": {
+      "type": "string",
+      "title": "What did you do?",
+      "description": "Describe what was leading up to the problem."
+    },
+    "whatDidYouExpectToHappen": {
+      "type": "string",
+      "title": "What did you expect to happen?"
+    },
+    "whatHappened": {
+      "type": "string",
+      "title": "What happended?"
+    }
+  }
+}
