@@ -632,7 +632,7 @@ A basic installation of the events plugin looks as follows.
 ```ts title="packages/backend/src/index.ts"
 const backend = createBackend();
 /* highlight-add-next-line */
-backend.add(import('@backstage/plugin-events-backend'));
+backend.add(import('@backstage/plugin-events-backend/alpha'));
 ```
 
 If you have other customizations made to `plugins/events.ts`, such as adding
@@ -646,6 +646,7 @@ depends on the appropriate extension point and interacts with it.
 
 ```ts title="packages/backend/src/index.ts"
 /* highlight-add-start */
+import { eventsServiceRef } from '@backstage/plugin-events-node';
 import { eventsExtensionPoint } from '@backstage/plugin-events-node/alpha';
 import { createBackendModule } from '@backstage/backend-plugin-api';
 /* highlight-add-end */
@@ -663,7 +664,28 @@ const eventsModuleCustomExtensions = createBackendModule({
       async init({ events /* ..., other dependencies */ }) {
         // Here you have the opportunity to interact with the extension
         // point before the plugin itself gets instantiated
-        events.addSubscribers(new MySubscriber()); // just an example
+        events.addHttpPostIngress({
+          // ...
+        });
+      },
+    });
+  },
+});
+/* highlight-add-end */
+
+/* highlight-add-start */
+const otherPluginModuleCustomExtensions = createBackendModule({
+  pluginId: 'other-plugin', // name of the plugin that the module is targeting
+  moduleId: 'custom-extensions',
+  register(env) {
+    env.registerInit({
+      deps: {
+        events: eventsServiceRef,
+        // ... and other dependencies as needed
+      },
+      async init({ events /* ..., other dependencies */ }) {
+        // Here you have the opportunity to interact with the extension
+        // point before the plugin itself gets instantiated
       },
     });
   },
@@ -671,17 +693,11 @@ const eventsModuleCustomExtensions = createBackendModule({
 /* highlight-add-end */
 
 const backend = createBackend();
-backend.add(import('@backstage/plugin-events-backend'));
+backend.add(import('@backstage/plugin-events-backend/alpha'));
 /* highlight-add-next-line */
 backend.add(eventsModuleCustomExtensions());
-```
-
-This also requires that you have a dependency on the corresponding node package,
-if you didn't already have one.
-
-```bash
-# from the repository root
-yarn --cwd packages/backend add @backstage/plugin-events-node
+/* highlight-add-next-line */
+backend.add(otherPluginModuleCustomExtensions());
 ```
 
 Here we've placed the module directly in the backend index file just to get
@@ -1026,3 +1042,24 @@ backend.add(import('@backstage/plugin-auth-backend'));
 backend.add(authModuleGoogleProvider);
 /* highlight-add-end */
 ```
+
+#### Using Legacy Providers
+
+Not all authentication providers have been refactored to support the new backend system. If your authentication provider module is not available yet, you will need to import your backend auth plugin using the legacy helper:
+
+```ts title="packages/backend/src/index.ts"
+import { createBackend } from '@backstage/backend-defaults';
+/* highlight-add-next-line */
+import { legacyPlugin } from '@backstage/backend-common';
+import { coreServices } from '@backstage/backend-plugin-api';
+
+const backend = createBackend();
+/* highlight-remove-next-line */
+backend.add(import('@backstage/plugin-auth-backend'));
+/* highlight-add-next-line */
+backend.add(legacyPlugin('auth'), import('./plugins/auth'));
+
+backend.start();
+```
+
+> You can track the progress of the module migration efforts [here](https://github.com/backstage/backstage/issues/19476).

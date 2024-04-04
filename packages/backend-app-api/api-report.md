@@ -6,6 +6,7 @@
 /// <reference types="node" />
 
 import type { AppConfig } from '@backstage/config';
+import { AuthService } from '@backstage/backend-plugin-api';
 import { BackendFeature } from '@backstage/backend-plugin-api';
 import { CacheClient } from '@backstage/backend-common';
 import { Config } from '@backstage/config';
@@ -18,6 +19,7 @@ import { Format } from 'logform';
 import { Handler } from 'express';
 import { HelmetOptions } from 'helmet';
 import * as http from 'http';
+import { HttpAuthService } from '@backstage/backend-plugin-api';
 import { HttpRouterService } from '@backstage/backend-plugin-api';
 import { HumanDuration } from '@backstage/types';
 import { IdentityService } from '@backstage/backend-plugin-api';
@@ -40,6 +42,10 @@ import { ServiceFactoryOrFunction } from '@backstage/backend-plugin-api';
 import { TokenManagerService } from '@backstage/backend-plugin-api';
 import { transport } from 'winston';
 import { UrlReader } from '@backstage/backend-common';
+import { UserInfoService } from '@backstage/backend-plugin-api';
+
+// @public (undocumented)
+export const authServiceFactory: () => ServiceFactory<AuthService, 'plugin'>;
 
 // @public (undocumented)
 export interface Backend {
@@ -143,6 +149,12 @@ export class HostDiscovery implements DiscoveryService {
   // (undocumented)
   getExternalBaseUrl(pluginId: string): Promise<string>;
 }
+
+// @public (undocumented)
+export const httpAuthServiceFactory: () => ServiceFactory<
+  HttpAuthService,
+  'plugin'
+>;
 
 // @public (undocumented)
 export interface HttpRouterFactoryOptions {
@@ -261,6 +273,8 @@ export function readHttpServerOptions(config?: Config): HttpServerOptions;
 export interface RootConfigFactoryOptions {
   argv?: string[];
   remote?: Pick<RemoteConfigSourceOptions, 'reloadInterval'>;
+  // (undocumented)
+  watch?: boolean;
 }
 
 // @public (undocumented)
@@ -322,6 +336,12 @@ export const tokenManagerServiceFactory: () => ServiceFactory<
 // @public (undocumented)
 export const urlReaderServiceFactory: () => ServiceFactory<UrlReader, 'plugin'>;
 
+// @public (undocumented)
+export const userInfoServiceFactory: () => ServiceFactory<
+  UserInfoService,
+  'plugin'
+>;
+
 // @public
 export class WinstonLogger implements RootLoggerService {
   // (undocumented)
@@ -347,12 +367,12 @@ export class WinstonLogger implements RootLoggerService {
 // @public (undocumented)
 export interface WinstonLoggerOptions {
   // (undocumented)
-  format: Format;
+  format?: Format;
   // (undocumented)
-  level: string;
+  level?: string;
   // (undocumented)
   meta?: JsonObject;
   // (undocumented)
-  transports: transport[];
+  transports?: transport[];
 }
 ```

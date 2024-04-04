@@ -223,7 +223,7 @@ export class DefaultIdentityClient implements IdentityApi {
 // @public (undocumented)
 export function encodeOAuthState(state: OAuthState): string;
 
-// @public
+// @public @deprecated
 export function getBearerTokenFromAuthorizationHeader(
   authorizationHeader: unknown,
 ): string | undefined;
@@ -638,6 +638,20 @@ export type TokenParams = {
     ent?: string[];
   } & Record<string, JsonValue>;
 };
+
+// @public
+export const tokenTypes: Readonly<{
+  user: Readonly<{
+    typParam: 'vnd.backstage.user';
+    audClaim: 'backstage';
+  }>;
+  limitedUser: Readonly<{
+    typParam: 'vnd.backstage.limited-user';
+  }>;
+  service: Readonly<{
+    typParam: 'vnd.backstage.service';
+  }>;
+}>;
 
 // @public
 export type WebMessageResponse =
